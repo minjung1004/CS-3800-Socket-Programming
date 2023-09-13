@@ -1,17 +1,25 @@
-import json
-# Ask client for their name
-user_name = input("Name: ")
-output = "Client of " + user_name
-print(output)
-pick_int = input("Choose a number between 1 and 100: ")
-user_int = int(pick_int)
+import socket
 
-dictionary = {
-        "name" : user_name,
-        "integer": user_int,
-}
+def main():
+    name="TESTSOCKET"
+    port = 12000
 
-json_object = json.dumps(dictionary, indent=4)
- 
-with open("sample.json", "w") as outfile:
-    outfile.write(json_object)
+    #take input
+    user_num = int(input("please input an integer between 1 and 100: "))
+
+    #start socket
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((socket.gethostname(), port))
+
+    #define message
+    send_message = f"this is a string,{user_num}"
+    print(send_message)
+
+    s.send(send_message.encode())
+    msg = s.recv(1024)
+    print(msg.decode("utf-8"))
+
+    pass
+
+if __name__ == "__main__":
+    main()
