@@ -10,7 +10,7 @@ def handle_client(connection, q):
         receive_msg = connection.recv(1024).decode()
         print("Message received!")
         
-        decoded = receive_msg.split(",")
+        decoded = receive_msg.split(":")
         string_data = decoded[0]
         int_data = int(decoded[1])
 
@@ -21,7 +21,7 @@ def handle_client(connection, q):
         print(f"Server Number: {SERVER_NUMBER}")
         print(f"Sum of Client and Server numbers: {int_data + SERVER_NUMBER}")
 
-        send_msg = f"{SERVER_NAME},{SERVER_NUMBER}"
+        send_msg = f"{SERVER_NAME}:{SERVER_NUMBER}"
 
         connection.send(send_msg.encode())
         print("Sending message to client!")
