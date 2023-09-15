@@ -1,4 +1,5 @@
 import socket
+import sys
 
 def main():
     name="CLIENT_SOCKET"
@@ -19,7 +20,13 @@ def main():
 
     #receive message
     msg = s.recv(1024)
-    print("message receied, decoding...")
+
+    # check if valid message
+    if len(msg) <= 1:
+        print("Received invalid response from server!")
+        sys.exit(1)
+    
+    print("message received, decoding...")
     decoded = msg.decode().split(":")
     string_data = decoded[0]
     int_data = int(decoded[1])
