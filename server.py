@@ -20,7 +20,8 @@ def handle_client(connection, q):
         int_data = int(decoded[1])
 
         if int_data < 1 or int_data > 100:
-            print(f"Client number out of range: {int_data}\nTerminating...")
+            print(f"Client number out of range: {int_data}")
+            connection.close()
             os.kill(os.getpid(), signal.SIGTERM)
 
         print(f"Client name: {string_data}")
@@ -42,6 +43,8 @@ def handle_terminate_signal(signum, frame):
     raise TerminateException()
 
 def main():
+    signal.signal(signal.SIGTERM, handle_terminate_signal)
+
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     s.bind(('', PORT))
@@ -59,7 +62,10 @@ def main():
             threading.Thread(target=handle_client(connection, q)).start()
 
     except TerminateException:
-        pass
+        print("Terminating...")
+    
+    finally:
+        s.close()
     
 
 if __name__ == "__main__":
